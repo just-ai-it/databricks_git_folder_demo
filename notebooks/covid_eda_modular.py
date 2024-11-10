@@ -1,17 +1,38 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC ### View the latest COVID-19 hospitalization data
-# MAGIC #### Setup 
-
-# COMMAND ----------
-
-# MAGIC %load_ext autoreload
-# MAGIC %autoreload 2
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC #### Get and Transform data
+
+# COMMAND ----------
+
+# MAGIC %pip install tqdm==4.67.0
+
+# COMMAND ----------
+
+# MAGIC %pip uninstall -y tqdm==4.67.0
+
+# COMMAND ----------
+
+import tqdm
+tqdm.__version__
+
+# COMMAND ----------
+
+# List installed packages with versions
+import pkg_resources
+
+installed_packages = [(d.project_name, d.version) for d in pkg_resources.working_set]
+installed_packages.sort()
+
+# Display in DataFrame format (optional)
+import pandas as pd
+df_packages = pd.DataFrame(installed_packages, columns=['Package', 'Version'])
+display(df_packages)
+
 
 # COMMAND ----------
 
@@ -24,7 +45,7 @@ from covid_analysis.transforms import *
 import pandas as pd
 
 df = pd.read_csv(data_path)
-df = filter_country(df, country='DZA')
+df = filter_country(df, country='USA')
 df = pivot_and_clean(df, fillna=0)  
 df = clean_spark_cols(df)
 df = index_to_col(df, colname='date')
@@ -41,8 +62,8 @@ display(df)
 
 # COMMAND ----------
 
-# Write to Delta Lake
-df.write.mode('overwrite').saveAsTable('neo_zhou.dbx_git_demo.covid_stats')
+# Write to Delta Lake with schema evolution enabled
+df.write.mode('overwrite').option('mergeSchema', 'true').saveAsTable('neo_zhou.dbx_git_demo.covid_stats')
 
 # COMMAND ----------
 
