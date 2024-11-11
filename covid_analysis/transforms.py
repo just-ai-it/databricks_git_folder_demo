@@ -22,3 +22,11 @@ def clean_spark_cols(pdf):
 def index_to_col(df, colname):
   df[colname] = df.index
   return df
+  
+
+# Create a pivot table function.
+def create_pivot_table(pdf, values, index, columns, fillna=None):
+  pdf = pdf.pivot_table(values=values, index=index, columns=columns)
+  if fillna is not None:
+    pdf = pdf.fillna(fillna)
+  return pdf
