@@ -4,12 +4,20 @@
 
 # COMMAND ----------
 
+# MAGIC %pip install pandas
+
+# COMMAND ----------
+
+
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC #### Get and Transform data
 
 # COMMAND ----------
 
-# MAGIC %pip install tqdm==4.67.0
+# MAGIC %pip install tqdm
 
 # COMMAND ----------
 
